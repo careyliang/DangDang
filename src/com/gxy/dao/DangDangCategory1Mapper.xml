@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxy.dao.Category1Dao">
+
+     <!-- 通用查询映射结果 --> 
+    <resultMap id="BaseResultMap" type="com.gxy.entity.DangDangCategory1">
+        <id column="dd_Category1_Id" property="ddCategory1Id" />
+        <result column="dd_Category1_Name" property="ddCategory1Name" />
+        <result column="dd_Category1_Create_Date" property="ddCategory1CreateDate" />
+        <result column="dd_Category1_Count" property="ddCategory1Count" />
+    </resultMap>
+    
+    <!-- 一级分类结果映射 -->
+    <resultMap id="category1WithCategory2Map" type="com.gxy.entity.DangDangCategory1">
+        <id column="dd_Category1_Id" property="ddCategory1Id" />
+        <result column="dd_Category1_Name" property="ddCategory1Name" />
+        <result column="dd_Category1_Create_Date" property="ddCategory1CreateDate" />
+        <collection property="listCategory2" ofType="com.gxy.entity.DangDangCategory2">
+        	<id column="dd_Category2_Id" property="ddCategory2Id" />
+	        <result column="dd_Category2_Name" property="ddCategory2Name" />
+	        <result column="dd_Category1_Id" property="ddCategory1Id" />
+	        <result column="dd_Category2_Create_Date" property="ddCategory2CreateDate" />
+        </collection>
+    </resultMap>
+    
+    <!-- 查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+    	select * from dangdang_category1
+    </select>
+    
+	<!-- 分类关联 -->
+	<select id="selectCategory" resultMap="category1WithCategory2Map">
+		select t1.dd_category1_id, t1.dd_category1_name,
+		       t1.dd_category1_create_date,
+		       t2.dd_category2_id, t2.dd_category2_name,
+		       t2.dd_category2_create_date from 
+		       dangdang_category1 t1 left join dangdang_category2 t2 
+		       on t1.dd_category1_id=t2.dd_category1_id
+	</select>
+	
+	<!-- 统计一级分类数量 -->
+	<select id="selectCountCategory1" resultType="java.util.Map">
+		select t2.dd_category1_id as "ddCategory1Id",count(*) as "category1Count" from dangdang_product t1 left join dangdang_category2 t2 
+         on t1.dd_category2_id = t2.dd_category2_id
+           group by t2.dd_category1_id
+	</select>
+	
+	
+</mapper>

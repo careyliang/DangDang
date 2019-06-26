@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxy.dao.OrderDao">
+
+     <!-- 通用查询映射结果 --> 
+    <resultMap id="BaseResultMap" type="com.gxy.entity.DangDangOrder">
+        <id column="order_Id" property="orderId" />
+        <result column="order_Ssid" property="orderSsid" />
+        <result column="order_Totalprice" property="orderTotalprice" />
+        <result column="order_State" property="orderState" />
+        <result column="dd_User_Id" property="ddUserId" />
+        <result column="order_Createdate" property="orderCreatedate" />
+    </resultMap>
+    
+    <!-- 查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+    	select * from dangdang_order
+    </select>
+    
+	<!-- 生成订单 -->
+	<insert id="insertOrder">
+		insert into dangdang_order(order_id,order_ssid,order_totalprice,order_state,dd_user_id)
+            values(seq_order.nextval,#{uuid},#{orderTotalPrice},0,#{ddUserId})
+	</insert>
+	
+	
+</mapper>

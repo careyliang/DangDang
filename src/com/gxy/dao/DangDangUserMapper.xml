@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxy.dao.UserDao">
+
+     <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxy.entity.DangDangUser">
+        <id column="dd_User_Id" property="ddUserId" />
+        <result column="dd_User_Email" property="ddUserEmail" />
+        <result column="dd_User_Password" property="ddUserPassword" />
+        <result column="dd_User_NickName" property="ddUserNickName" />
+        <result column="dd_User_State" property="ddUserState" />
+        <result column="dd_User_Salt" property="ddUserSalt" />
+        <result column="dd_User_Role" property="ddUserRole" />
+        <result column="dd_User_Create_Date" property="ddUserCreateDate" />
+    </resultMap>
+    
+    <!-- 查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+    	select * from DANGDANG_USER
+    </select>
+    
+    <!-- 用户登录 -->
+    <select id="selectUser" resultMap="BaseResultMap">
+    	select * from DANGDANG_USER where dd_user_email=#{ddUserEmail,jdbcType=VARCHAR} 
+    				and dd_user_password=#{ddUserPassword,jdbcType=VARCHAR}
+    </select>
+    
+	<!-- 插入用户 -->
+	<insert id="insertUser">
+		insert into dangdang_user(dd_user_id,dd_user_email,dd_user_password,dd_user_nickname)
+              values(seq_dangdang_user.nextval,#{user.ddUserEmail},#{user.ddUserPassword},#{user.ddUserNickName})
+	</insert>
+	
+	
+</mapper>

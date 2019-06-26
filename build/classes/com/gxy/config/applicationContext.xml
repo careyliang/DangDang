@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!-- 开启注解扫描 -->
+	<context:component-scan base-package="com.gxy.service"></context:component-scan>
+	
+	<!-- 加载数据库连接的配置文件 -->
+	<context:property-placeholder location="classpath:com/gxy/config/jdbc.properties"/>
+	
+	<!-- 创建数据源:使用的是dbcp     c3p0 druid(alibaba)数据源 -->		
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${driver}"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${name}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+	
+	<!-- 创建sqlSession工厂 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		
+		<!-- 加载映射文件 -->
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/gxy/dao/*Mapper.xml</value>
+			</list>
+		</property>
+		<!-- 
+		entity包下的所有类,起别名
+		com.baibzhi.ssdemo.entity.User ==>User 
+		-->
+		<property name="typeAliasesPackage" value="com.gxy.entity"></property>
+	</bean>
+	
+	<!-- 
+	sqlSession.getMapper(UserDao.class)
+	
+	名字:UserDao ===>userDao
+	 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 在这个包下的所有接口,由spring动态生成代理对象 -->
+		<property name="basePackage" value="com.gxy.dao"></property>
+	</bean>
+	
+	
+	
+</beans>

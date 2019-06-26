@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxy.dao.OrderDetailDao">
+
+     <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxy.entity.DangDangOrderDetail">
+        <id column="detail_Id" property="detailId" />
+        <result column="detail_Ssid" property="detailSsid" />
+        <result column="detail_Product_Name" property="detailProductName" />
+        <result column="detail_Count" property="detailCount" />
+        <result column="detail_Ddprice" property="detailDdprice" />
+        <result column="dd_Product_Id" property="ddProductId" />
+        <result column="order_Ssid" property="orderSsid" />
+        <result column="address_Id" property="addressId" />
+        <result column="dd_User_Id" property="ddUserId" />
+        <result column="detail_CreateDate" property="detailCreateDate" />
+    </resultMap>
+    
+    <!-- 查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+    	select * from dangdang_order_detail
+    </select>
+    
+    <!-- 插入 -->
+    <insert id="insertDetail">
+    	insert into dangdang_order_detail(detail_id,detail_ssid,detail_count,detail_ddprice,dd_product_id,
+                  order_ssid,address_id,dd_user_id,detail_product_name)
+                  values(seq_order_detail.nextval,sys_guid(),#{orderDetail.detailCount},
+                  		#{orderDetail.detailDdprice},#{orderDetail.ddProductId},#{orderDetail.orderSsid},
+                  		#{orderDetail.addressId},#{orderDetail.ddUserId},#{orderDetail.detailProductName})
+    </insert>
+    
+	
+	
+</mapper>

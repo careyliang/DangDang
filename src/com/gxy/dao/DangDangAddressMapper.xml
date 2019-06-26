@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gxy.dao.AddressDao">
+
+     <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gxy.entity.DangDangAddress">
+        <id column="address_Id" property="addressId" />
+        <result column="address_Receive_Name" property="addressReceiveName" />
+        <result column="address_Add" property="addressAdd" />
+        <result column="address_Mobile" property="addressMobile" />
+        <result column="address_Zipcode" property="addressZipcode" />
+        <result column="address_State" property="addressState" />
+        <result column="dd_User_Id" property="ddUserId" />
+        <result column="address_CreateDate" property="addressCreateDate" />
+    </resultMap>
+    
+    <!-- 查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+    	select * from dangdang_address
+    		<where>
+				<if test="addressId != 0 and addressId !='' ">
+					and address_Id = #{addressId}
+				</if>
+				<if test="ddUserId != 0 and ddUserId !='' ">
+					and dd_User_Id = #{ddUserId}
+				</if>
+			</where>
+    </select>
+    
+	
+	<!-- 生成地址条目 -->
+	<insert id="insertAddress" parameterType="com.gxy.entity.DangDangAddress">
+		<!-- 提前在数据库生成序列ID，然后把ID赋值给对象 -->
+		<selectKey keyProperty="addressId" order="BEFORE" resultType="java.lang.Integer">
+			select seq_address.nextval from dual
+		</selectKey>
+			insert into dangdang_address(address_id,address_receive_name,address_add,
+              address_mobile,address_zipcode,address_state,dd_user_id)
+              values(#{addressId},#{addressReceiveName},#{addressAdd},#{addressMobile},
+              		#{addressZipcode},#{addressState},#{ddUserId})
+	</insert>
+	
+</mapper>
